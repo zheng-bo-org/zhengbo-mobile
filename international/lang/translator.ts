@@ -17,10 +17,6 @@ const lngs: {[key: string]: {
         code: "en"
     }
 }
-const lngNameMapping: { [key: string]: string } = {
-    "中文": "cn",
-    "English":"en"
-}
 
 const deviceLanguage: string = getLocales()[0].languageCode;
 const i18n = new I18n(Object.keys(lngs).reduce((rs, key) => {
@@ -40,10 +36,10 @@ export function translateWithKey(key: string): string {
 }
 
 export function resetDefaultLng(lngName: string): void {
-    const lngCode = lngNameMapping[lngName];
+    const lngCode = lngs[lngName].code;
     defaultLng = lngCode;
 }
 
 export function getSupportedLngNames(): string[] {
-    return Object.keys(lngNameMapping)
+    return Object.keys(lngs)
 }
