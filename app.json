@@ -5,6 +5,9 @@
       "bundler": "metro"
     },
     "name": "zhengbo",
-    "slug": "zhengbo"
+    "slug": "zhengbo",
+    "plugins": [
+      "expo-localization"
+    ]
   }
 }
