@@ -35,7 +35,7 @@ export function translateWithKey(key: string): string {
     return i18n.t(key);
 }
 
-export function resetDefaultLng(lngName: string): void {
+export function changeDefaultLng(lngName: string): void {
     const lngCode = lngs[lngName].code;
     defaultLng = lngCode;
 }
