@@ -1,4 +1,4 @@
-# zhengbo-backend
+# zhengbo-mobile
 Responsible for providing Android and IOS applications for ZHENGBO. 
 
 # About the license
