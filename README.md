@@ -1,5 +1,5 @@
 # zhengbo-backend
-Responsible for providing back-end services for ZHENGBO,such as login, registration, etc.
+Responsible for providing Android and IOS applications for ZHENGBO. 
 
 # About the license
                 
