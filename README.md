@@ -1,7 +1,7 @@
 # zhengbo-mobile
 Responsible for providing Android and IOS applications for ZHENGBO. 
 
-# About the license
+# About the license (许可证说明)
                 
 This license applies only to the code portion of this project. 
 The contents of any directory starting with ‘/asset’ within this project are not allowed to be used publicly. 
