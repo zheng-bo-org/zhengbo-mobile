@@ -15,7 +15,7 @@ However, if you want to use the code from this project, you must open source you
 但是，如果您要使用本项目中的代码，您必须开源您的项目。
 
 
-#.env
+# .env
 ```
 SERVER_HOST_DEV=local backend server
 SERVER_HOST_PROD=product backend server
