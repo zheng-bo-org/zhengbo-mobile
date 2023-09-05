@@ -7,7 +7,7 @@ type Problem = {
     err?: Error
 }
 
-export interface God {
+interface God {
     help(problem: Problem): Promise<void>
 }
 
