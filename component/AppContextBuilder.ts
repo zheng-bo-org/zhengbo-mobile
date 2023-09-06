@@ -33,19 +33,20 @@ const localeDpsResolver: AppContextDepsResolver<Locale> = {
     }
 }
 
-const appContextDepsResolvers: AppContextDepsResolver<any>[] = []
+const appContextDepsResolvers: AppContextDepsResolver<any>[] = [localeDpsResolver]
 type ContextDps = "locale"
 class SimpleAppContext implements AppContext {
+    dps: Record<ContextDps, any>
     constructor(dps: Record<ContextDps, any>) {
-
+        this.dps = dps;
     }
 
     locale(): Locale {
-        return undefined;
+        return this.dps["locale"]
     }
 
     toJSON(): string {
-        return "";
+        return JSON.stringify(this.dps);
     }
 }
 
