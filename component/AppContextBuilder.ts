@@ -1,4 +1,4 @@
-import {AppContext, ResourceLoader, Locale} from '../app/index'
+import {AppContext, ResourceLoader, Locale} from '../app'
 import {getLocales} from "expo-localization";
 import {logError} from "../god/God";
 
@@ -6,30 +6,36 @@ interface AppContextDepsResolver<T> {
     resolve(dps:Record<ContextDps, any>): Promise<[ContextDps, T]>
 }
 
-type LocaleResolver = (currency: string) => Locale | undefined;
+type LocaleResolver = (currency: string | null) => Locale | undefined;
 const localeResolvers: LocaleResolver[] = [
-    (currency: string): Locale | undefined => {
+    (currency: string | null): Locale | undefined => {
         return currency === "CNY" ? "cn" : undefined
     },
-    (currency: string): Locale | undefined => {
+    (currency: string | null): Locale | undefined => {
         return "en"
     }
 ];
 
+//@ts-ignore
 const localeDpsResolver: AppContextDepsResolver<Locale> = {
-    resolve(dps:Record<ContextDps, any>): Promise<[ContextDps, Locale]> {
+    async resolve(dps:Record<ContextDps, any>): Promise<[ContextDps, Locale]> {
+        let defaultLocale: [ContextDps, Locale] = ["locale", "en"];
+
         const locales = getLocales();
-        if (locales === undefined || locales.length == 0) {
-            logError("Locale/resolveTheLocale", `Unable to resolve the locale of the user. ${JSON.stringify(dps)}`, undefined);
-            return ["locale", "cn"] as [ContextDps, Locale] as any;
+        if(locales === undefined || locales.length === 0) {
+            logError("Locale/resolveTheLocale", `Unable to resolve the locale of the user. ${JSON.stringify(dps)}`, undefined)
+            return defaultLocale;
         }
+
         const currencyOfTheLocale = locales[0].currencyCode;
         for (const resolver of localeResolvers) {
             const locale = resolver(currencyOfTheLocale)
             if(locale !== undefined) {
-                return ["locale", locale] as [ContextDps, Locale] as any;
+                defaultLocale =  ["locale", locale] as [ContextDps, Locale] as any
             }
         }
+
+        return defaultLocale;
     }
 }
 
