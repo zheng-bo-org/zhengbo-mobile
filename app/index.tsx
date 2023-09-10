@@ -25,7 +25,7 @@ export interface ResourceLoader<T> {
 const resources: ResourceLoader<any>[] = []
 const rootResourceLoader: ResourceLoader<AppContext> = AppContextLoader;
 
-function MeAndYou() {
+function LoadingScreen() {
    return <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
        <Text>
            I am the splash screen....
@@ -75,7 +75,7 @@ export default function App() {
     }, [])
 
     if (!appReady) {
-        return <MeAndYou/>
+        return <LoadingScreen/>
     }else {
         splashScreen.hideAsync().then(() => {
             router.push("signIn")
