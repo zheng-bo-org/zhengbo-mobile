@@ -19,7 +19,7 @@ export interface ResourceLoader<T> {
      * @param appContext context of the app.
      * @return if load succeeded return undefined else return the reason.
      */
-    load(appContext: AppContext): Promise<string | undefined | T>
+    load(appContext: AppContext | null): Promise<string | undefined | T>
 }
 
 const resources: ResourceLoader<any>[] = []
