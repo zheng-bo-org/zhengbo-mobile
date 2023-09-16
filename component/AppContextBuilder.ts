@@ -1,10 +1,12 @@
 import {ResourceLoader} from "../app";
-
+import {loadThemeDefs, whiteThemeDef, ThemeDef} from "./theme/theme";
 export type AppLanguage = "en" | "cn"
 
 export interface Context {
     system: {
         lng: AppLanguage
+        currentTheme: ThemeDef,
+        themeOptions: ThemeDef[]
     }
 }
 
@@ -14,7 +16,9 @@ type ContextItemBuilder = (context: Context) => Context;
 const systemLngBuilder: ContextItemBuilder = (context: Context): Context => {
     return {
         system: {
-            lng: "en"
+            lng: "en",
+            currentTheme: whiteThemeDef,
+            themeOptions: loadThemeDefs((keyOfThemeName, keyOfThemeDesc) => {return []})
         }
     }
 }

@@ -1,8 +1,10 @@
 import React, {createContext, Reducer, useContext, useReducer} from "react";
 import {AppLanguage, buildAppContext, Context} from "../AppContextBuilder";
+import {Themes} from "../theme/theme";
 
 type ActionTypes = {
     "changeLngTo": AppLanguage,
+    "changeTheme": Themes
 }
 
 
@@ -22,6 +24,21 @@ const reducer = (state: Context, action: Action): Context => {
                system: {
                    ...state.system,
                    lng: action.payload
+               }
+           }
+       case "changeTheme":
+           const theTheme = state.system.themeOptions.find((theme) => {
+               return theme.code === action.payload;
+           })
+           if (theTheme == undefined) {
+               return state;
+           }
+
+           return {
+               ...state,
+               system: {
+                   ...state.system,
+                   currentTheme: theTheme
                }
            }
        default:
