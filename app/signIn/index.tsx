@@ -5,7 +5,7 @@ import React from "react";
 
 export default function RoleSelectionScreen() {
 
-    const {state: {system: {currentTheme: {theme}, lng}}, dispatch} = useAppContext();
+    const {state: {system: {currentTheme: {theme}, currentLngPack}}, dispatch} = useAppContext();
 
     return <View style={{backgroundColor: theme["40%"], flex: 1, alignItems: 'center', justifyContent: 'center'}}>
         <Text style={{color:theme["30%"], fontWeight: 'bold', fontSize: 29}}>
@@ -13,15 +13,21 @@ export default function RoleSelectionScreen() {
         </Text>
 
         <Text>
-            The current lng is {<Text style={{color: theme["10%"]}}>
-            {lng}
+            The current language pack apply for {<Text style={{color: theme["10%"]}}>
+            {currentLngPack.applyForTheNations}
         </Text>}
+        </Text>
 
+        <Text>
+            The content for test international functionality is:
+            <Text style={{color: theme["10%"]}}>
+                {currentLngPack.lng["/signIn/index"].test}
+            </Text>
         </Text>
         <Button title={"Change the Lng"} onPress={() => {
             dispatch({
-                type: "changeLngTo",
-                payload: "cn"
+                type: "changeLngPackFor",
+                payload: '中国'
             })
         }} color={theme["10%"]}/>
 

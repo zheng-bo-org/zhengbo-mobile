@@ -1,9 +1,10 @@
 import React, {createContext, Reducer, useContext, useReducer} from "react";
 import {AppLanguage, buildAppContext, Context} from "../AppContextBuilder";
 import {Themes} from "../theme/theme";
+import {Nation} from "../../international/lang/international";
 
 type ActionTypes = {
-    "changeLngTo": AppLanguage,
+    "changeLngPackFor": Nation,
     "changeThemeTo": Themes
 }
 
@@ -18,12 +19,20 @@ type Action = {
 
 const reducer = (state: Context, action: Action): Context => {
    switch (action.type) {
-       case "changeLngTo":
+       case "changeLngPackFor":
+           const theLngPack = state.system.lngPackOptions.find((pack) => {
+               return pack.applyForTheNations.includes(action.payload)
+           })
+
+           if (theLngPack == undefined) {
+               return state
+           }
+
            return {
                ...state,
                system: {
                    ...state.system,
-                   lng: action.payload
+                   currentLngPack: theLngPack
                }
            }
        case "changeThemeTo":
