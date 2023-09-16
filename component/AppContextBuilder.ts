@@ -1,24 +1,27 @@
 import {ResourceLoader} from "../app";
 import {loadThemeDefs, whiteThemeDef, ThemeDef} from "./theme/theme";
+import {defaultLngPack, getLanguagePacks, LanguagePack} from "../international/lang/international";
 export type AppLanguage = "en" | "cn"
 
 export interface Context {
     system: {
-        lng: AppLanguage
         currentTheme: ThemeDef,
         themeOptions: ThemeDef[]
+        currentLngPack: LanguagePack,
+        lngPackOptions: LanguagePack[]
     }
 }
 
 type ContextItemBuilder = (context: Context) => Context;
 
 
-const systemLngBuilder: ContextItemBuilder = (context: Context): Context => {
+const systemLngBuilder: ContextItemBuilder = (): Context => {
     return {
         system: {
-            lng: "en",
             currentTheme: whiteThemeDef,
-            themeOptions: loadThemeDefs((keyOfThemeName, keyOfThemeDesc) => {return []})
+            themeOptions: loadThemeDefs(),
+            currentLngPack: defaultLngPack,
+            lngPackOptions: getLanguagePacks()
         }
     }
 }
@@ -35,7 +38,7 @@ export function buildAppContext(): Context {
 }
 
 export const rootResourceLoader: ResourceLoader<Context> = {
-    load(appContext: Context): Promise<string | undefined | Context> {
+    load(): Promise<string | undefined | Context> {
         return Promise.resolve(buildAppContext());
     }
 }

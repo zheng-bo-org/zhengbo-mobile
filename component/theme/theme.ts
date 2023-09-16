@@ -48,6 +48,6 @@ export const whiteThemeDef: ThemeDef = {
     }
 }
 
-export function loadThemeDefs(translator: (keyOfThemeName: string, keyOfThemeDesc: string) => string[]): ThemeDef[] {
+export function loadThemeDefs(): ThemeDef[] {
     return [pinkThemeDef, whiteThemeDef]
 }

@@ -6,8 +6,6 @@ import {useRouter} from "expo-router";
 import {buildError} from "../component/AwardedError";
 export {ErrorBoundary} from '../component/AwardedError'
 splashScreen.preventAutoHideAsync();
-export type Locale = "en" | "cn"
-
 
 export interface ResourceLoader<T> {
     /**
