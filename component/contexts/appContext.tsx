@@ -4,7 +4,7 @@ import {Themes} from "../theme/theme";
 
 type ActionTypes = {
     "changeLngTo": AppLanguage,
-    "changeTheme": Themes
+    "changeThemeTo": Themes
 }
 
 
@@ -26,7 +26,7 @@ const reducer = (state: Context, action: Action): Context => {
                    lng: action.payload
                }
            }
-       case "changeTheme":
+       case "changeThemeTo":
            const theTheme = state.system.themeOptions.find((theme) => {
                return theme.code === action.payload;
            })

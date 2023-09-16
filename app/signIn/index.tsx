@@ -27,7 +27,7 @@ export default function RoleSelectionScreen() {
 
         <Button title={"change the theme"} onPress={() => {
             dispatch({
-                type: "changeTheme",
+                type: "changeThemeTo",
                 payload: "Pink"
             })
         }} color={theme["10%"]}/>
