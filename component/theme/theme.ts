@@ -6,6 +6,8 @@
  * 30%: should be noticed by user a little bit from 40%, it's hard to describe when to use it, but you'll know that if you're an artist.
  * 20%: Users should notice 20% a little bit from 30%,
  * 10%: should absolutely be noticed by users.
+ *
+ * You can find more themes on this website: https://colorhunt.co/
  */
 export type Theme = {
     "40%": string,
