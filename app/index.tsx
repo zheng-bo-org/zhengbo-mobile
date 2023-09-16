@@ -1,17 +1,13 @@
 import {useEffect, useState} from "react";
 import * as splashScreen from 'expo-splash-screen'
-import {rootResourceLoader as AppContextLoader} from '../component/AppContextBuilder'
+import {Context, rootResourceLoader as AppContextLoader} from '../component/AppContextBuilder'
 import {Text, View} from "react-native";
 import {useRouter} from "expo-router";
 import {buildError} from "../component/AwardedError";
-
 export {ErrorBoundary} from '../component/AwardedError'
 splashScreen.preventAutoHideAsync();
 export type Locale = "en" | "cn"
-export interface AppContext  {
-    locale(): Locale,
-    toJSON(): string
-}
+
 
 export interface ResourceLoader<T> {
     /**
@@ -19,11 +15,11 @@ export interface ResourceLoader<T> {
      * @param appContext context of the app.
      * @return if load succeeded return undefined else return the reason.
      */
-    load(appContext: AppContext | null): Promise<string | undefined | T>
+    load(appContext: Context | null): Promise<string | undefined | T>
 }
 
 const resources: ResourceLoader<any>[] = []
-const rootResourceLoader: ResourceLoader<AppContext> = AppContextLoader;
+const rootResourceLoader: ResourceLoader<Context> = AppContextLoader;
 
 function LoadingScreen() {
    return <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
@@ -41,7 +37,7 @@ export default function App() {
     const router = useRouter();
 
     useEffect(() => {
-        async function loadAppContext(): Promise<AppContext> {
+        async function loadAppContext(): Promise<Context> {
            const appContext = await rootResourceLoader.load(null);
            if (typeof appContext === "string") {
                throwError(() => {
@@ -49,13 +45,13 @@ export default function App() {
                })
            }
 
-           return appContext as AppContext;
+           return appContext as Context;
         }
 
         async function prepare() {
             try {
-                const appContext: AppContext = await loadAppContext();
-                console.debug(`appContext? ${appContext.toJSON()}`)
+                const appContext: Context = await loadAppContext();
+                console.debug(`appContext? ${JSON.stringify(appContext)}`)
                 for (const resource of resources) {
                     await resource.load(appContext)
                 }
