@@ -1,5 +1,5 @@
-import {AppContext, Locale} from "../app";
 import signInIndexDataLoader from './screenDataLoader/signIn/index'
+import {buildAppContext, Context} from "../component/AppContextBuilder";
 
 //The actual screen path inside app folder.
 //If there are more than one screens and should be loaded conditionally based on the user action.
@@ -10,8 +10,8 @@ export type Screen =  "signIn/index"
 //Screen developer should not care about API details.
 export type API = "selectableSystemRoles";
 
-export type ScreenDataLoader = (data: Object, context: AppContext) => Promise<Record<Screen, Object>>
-export type ApiDataLoader = (data: Object, context: AppContext) => Promise<Object>
+export type ScreenDataLoader = (data: Object, appContext: Context) => Promise<Record<Screen, Object>>
+export type ApiDataLoader = (data: Object, appContext: Context) => Promise<Object>
 
 const signInScreenDataLoaders: Record<Screen, ScreenDataLoader> = {"signIn/index": signInIndexDataLoader}
 const apis: Record<API, ApiDataLoader> = {
@@ -24,18 +24,11 @@ const screenDataLoaders: Record<Screen, ScreenDataLoader> = {...signInScreenData
 type ScreenDataLoaderReq = {
     reqData: Object
 };
-const mockedContext:AppContext = {
-    locale(): Locale {
-        return "en"
-    },
-    toJSON(): string {
-        return ""
-    }
-}
+const mockedContext:Context = buildAppContext();
 export async function loadInitDataForThePage(screen: Screen, req: ScreenDataLoaderReq): Promise<Record<Screen, Object>> {
     const dataLoader = screenDataLoaders[screen];
     if (screenDataLoaders == undefined) {
-        return undefined;
+        throw new Error("No such loader found.")
     }
 
     return dataLoader(req, mockedContext)
@@ -44,7 +37,7 @@ export async function loadInitDataForThePage(screen: Screen, req: ScreenDataLoad
 export async function sendRequest(api:API, data: Object): Promise<Object>{
     const dataLoader = apis[api];
     if (api == null) {
-        return undefined;
+        throw new Error("No such API found.")
     }
     return dataLoader(data, mockedContext)
 }

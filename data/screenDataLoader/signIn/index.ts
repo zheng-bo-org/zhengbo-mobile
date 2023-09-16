@@ -1,7 +1,7 @@
 import {Screen, ScreenDataLoader} from "../../data";
-import {AppContext} from "../../../app";
+import {Context} from "../../../component/AppContextBuilder";
 
-export async function load(data: Object, context:AppContext): Promise<Record<Screen, Object>>  {
+export async function load(data: Object, context:Context): Promise<Record<Screen, Object>>  {
    return {
        "signIn/index": {}
    }
