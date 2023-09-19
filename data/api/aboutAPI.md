@@ -5,7 +5,7 @@ And its data(code) itself to describle how to access the data.
 *global data: Which means its avaliable for all components, its not component level data, like states or something.
 ```
 
-# How do I define an API
+# How do I define an API?
 ```
 Use lisp syntax string to do that.
 For example which retrive from local storage.
@@ -20,9 +20,9 @@ type SystemAPI = {
 }
 ```
 
-## How do I define an ResetAPI.
+## How do I define a ResetAPI?
 ```
-Rest API use use the keyboards:
+Use the symbol below: 
  "Rest/get" 
  "Rest/post"
  "Rest/put"
@@ -40,22 +40,25 @@ For example:
         birthDate: Date
     }
 }
-You can treat the the elements inside the () is an array list.
-The first element is a symbol to tell us in which method to send the http request.
-The second element is the url format information about the http requets.
-The thrid element is a map data strucutre that defines the relation between the request data and the url.
-The fourth is a description for the api.
+You may treat the elements inside the () is an array list.
 
-For above example, its a get request and the path of the request is /users/:id, the :id means it should be treated an value.
-And the thrid element means how to resolve the request path its a mappings between the /users/:id and the request data {id: number}
-If you send the request data with {id: 234} it will be reduced to (Rest/get /users/234)
-And for the thrid element there are some utils keybaords exists for make the process of mapping easier.
+The first element is a symbol to tell us in which method to send the http request.
+
+The second element is the url formatting information about the http requets.
+
+The thrid element is a map data strucutre that defines the mappings between the request data and the url formatting
+based on the keywords in the url and the key names in the data request.
+If you send the request data with {id: 234} it will be reduced to (Rest/get /users/234) for the definition: /users/:id {:id id}
+
+The fourth is a description for the api
 ```
 ### (Rest/get url urlAndRequestDataMappings (comments))
 ```
-This is for the http get request. For lisp its enghout to make eval it and send an http request.
-But for React-Navite with Typescript, its not too much clear, The developr have to know which data should I sent ? Which data that I will get??
-For resolve two things above, you should defined a get http request in ts file like below:
+This is for the http get request.
+But for React-Navite with Typescript, its not too much clear, The developr have to know
+which data should I sent ?
+Which data that I will get??
+To fixs that, you should defined a get http request in ts file in below format:
 
 export type UserAPI = { 
     //Use a map data structure to define the mappings between http request format and the data sent by the caller.
@@ -90,13 +93,16 @@ You see there is a type after the api definition: {
 
 Its stands for the request data for the api and the response data of the api returns.
 In this way when developrs calling an api its easy for them to know which api is calling right now 
-and which data should I sent and What Data its returns.
+and which data should I sent and what data its returns.
 
-You may noticed there is a unnormal keyword "selfMappings" on the thrid element which is the mappings between the url format and the request data.
+You may noticed there is a unnormal keyword "selfMappings" on the thrid element
+which is used for mappings between the url format and the request data.
 (Rest/get /users/:id/posts?:postedDateGreaterThan&:deleted selfMappings (get the posts of the user conditionaly))
 
-The selfMappings is nothing but the request data will self mapping its value by its name to the same keyword in the request url.
-In this case its will reduce to (Rest/get /users/123/posts?postedDateGreaterThan=2023-10-01&deleted=true) from the request data below: 
+The selfMappings means the request data will self mapping its value by its name to the same keyword in the request url.
+In this case it will reduce to
+(Rest/get /users/123/posts?postedDateGreaterThan=2023-10-01&deleted=true)
+from the request data below: 
 {
     id:123,
     postedDateGreaterThan:2023-10-01,
@@ -108,12 +114,13 @@ In this case its will reduce to (Rest/get /users/123/posts?postedDateGreaterThan
 ```
 This is for the http post request.
 The first element is a symbol for the http post request
-The second one is a the url 
+The second one is the url 
 The thrid one is the mappings between url-format and request data
-The forth is the mappings for the http post body data and the request data;
+The forth is the mappings is the mappings beetween the http post request body and the request data;
 The fifth is the description of the API.
 
-The there are keywords for the urlAndRequestDataMappings and requestBodyAndRequestDataMappings for make it easier.
+There are keywords for the urlAndRequestDataMappings and requestBodyAndRequestDataMappings to make the works easier.
+
 urlAndRequestDataMappings: 
     selfMappings: It will self mapping the request data to the url-format based on the same key.
 requestBodyAndRequestDataMappings: 
@@ -131,8 +138,11 @@ For example:
         failedReason: string
     }
 }
-The selfMappings will take value of the id from the request data put it to the url, above example it will be /users/234/posts
-The asBody keyword will send the request data without any modification as body with http request, in above example, it will send the body as 
+The selfMappings will take value of the id from the request data put it to the url
+In above example it will be /users/234/posts
+
+The asBody keyword will send the request data without any modification as body with http request,
+In above example, it will send the body as below
 {
         id: 234,
         postTitle: string,
@@ -153,7 +163,7 @@ Or:
 }
 In this case its means that you are specifiying the keywords by yourself.
 
-What if in the url no format stuffs exists ? You just put an empty map for it, for example:
+What if in the url no formatting stuffs exists ? You may put an empty map for it, for example:
 (Rest/post /users/tokens {} asBody (login)): {
     req: {
         username: string,
@@ -167,8 +177,12 @@ What if in the url no format stuffs exists ? You just put an empty map for it, f
 ### What about the rest of http method?
 ```
 Its the same logic for rest of them.
-For the thrid one in the rest api definition you can use keywrod 'selfMappings' to make it easier or mapping by yourself.
-For the forth one in the rest api definition, you can use keyword asBody to make it easier or mapping by yourself.
+
+For the thrid one in the rest api definition,
+you may use keywrod 'selfMappings' to make it easier or mapping by yourself.
+
+For the forth one in the rest api definition,
+you may use keyword asBody to make it easier or mapping by yourself.
 
 Here is the syntax for the rest of them.
 (Rest/delete url urlAndRequestDataMappings requestBodyAndRequestDataMappings (comments))
@@ -180,13 +194,16 @@ Here is the syntax for the rest of them.
 ## What about local storage?
 ```
 Its same logic with rest api but a little bit diffrent from rest api definition.
-You may think of to access the local storage data like its using the a key of a big map data and with some filters.
+You may think of to access the local storage data like its using
+A key of a big map data and with some filters.
+
 (get-from-local key-of-the-storage): {
     req: {
-        
+        xxx-should-greater-than: number,
+        xxx1-should-be-fully-matched-with: string
     },
     res: {
-        
+        data: Data[]
     }
 }
 
