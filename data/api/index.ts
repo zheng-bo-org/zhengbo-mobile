@@ -1,16 +1,3 @@
-export type SystemAPI = {
-    "(get /system/roles {} (get system roles))": {
-        req: {
-
-        },
-        res: {
-            roles: string[]
-        }
-    },
-
-}
-
-
 //Api definition in Lisp syntax
 //An API is an abstraction to completely remove the complexity to the users of the API.
 //The users of the APIS should only care about three things.
@@ -22,16 +9,34 @@ export type SystemAPI = {
 //Furthermore, the api types or definition should be a library dependency provided by backend developer in lisp syntax.
 //Second, The API should be able to eval to http request format in any http request library,
 //Like axios or fetch, a simple example in lisp syntax: (to-axios-request apiDef data) (to-fetch-request apiDef data)
-export type Api =  (SystemAPI)
-export type ApiReqDef  = {
-    [K in keyof Api]: {
-        apiDef: K,
-        reqDef: Api[K]
+import {SystemAPI} from "./system";
+
+export type API<T extends {
+    [K in string]: {
+        req: {
+            [key:string]:any
+        },
+        res: {
+            [key: string]: any
+        }
+    }
+}> = {
+    [K in keyof T]: {
+        req: { [key: string]: any },
+        res: { [key: string]: any }
     }
 }
-type RequestTypeOfTheApiGeneric<T extends keyof ApiReqDef> = ApiReqDef[T]['reqDef']['req']
-type ResponseTypeOfTheApiGeneric<T extends keyof ApiReqDef> = ApiReqDef[T]['reqDef']['res']
-export async  function api<T extends keyof ApiReqDef>(api: T, reqData: RequestTypeOfTheApiGeneric<T>):
+
+export type Apis = API<SystemAPI>
+export type FlattedApis  = {
+    [K in keyof Apis]: {
+        apiDef: K,
+        reqDef: Apis[K]
+    }
+}
+type RequestTypeOfTheApiGeneric<T extends keyof FlattedApis> = FlattedApis[T]['reqDef']['req']
+type ResponseTypeOfTheApiGeneric<T extends keyof FlattedApis> = FlattedApis[T]['reqDef']['res']
+export async  function api<T extends keyof FlattedApis>(api: T, reqData: RequestTypeOfTheApiGeneric<T>):
     Promise<ResponseTypeOfTheApiGeneric<T>> {
     return {} as any;
 }
