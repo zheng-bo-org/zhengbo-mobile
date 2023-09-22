@@ -37,7 +37,7 @@ export type FlattedApis  = {
 }
 type RequestTypeOfTheApiGeneric<T extends keyof FlattedApis> = FlattedApis[T]['reqDef']['req']
 type ResponseTypeOfTheApiGeneric<T extends keyof FlattedApis> = FlattedApis[T]['reqDef']['res']
-export async  function api<T extends keyof FlattedApis>(api: T, reqData: RequestTypeOfTheApiGeneric<T>):
+export async  function api<T extends keyof FlattedApis>(api: T, req: RequestTypeOfTheApiGeneric<T>):
     Promise<ResponseTypeOfTheApiGeneric<T>> {
     return {} as any;
 }
