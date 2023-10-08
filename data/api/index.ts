@@ -13,24 +13,9 @@ import lspMetadata from './apiMetadata.json'
 //Furthermore, the api types or definition should be a library dependency provided by backend developer in lisp syntax.
 //Second, The API should be able to eval to http request format in any http request library,
 //Like axios or fetch, a simple example in lisp syntax: (to-axios-request apiDef data) (to-fetch-request apiDef data)
-export type API<T extends {
-    [K in string]: {
-        req: {
-            [key: string]: any
-        },
-        res: {
-            [key: string]: any
-        }
-    }
-}> = {
-    [K in keyof T]: {
-        req: { [key: string]: any },
-        res: { [key: string]: any }
-    }
-}
 
-//Add more APIS here with the syntax: API<SystemAPI & xxxAPISet & AnotherAPISet>
-export type Apis = API<SystemAPI>
+//Add more APIS here with the syntax: APIs<SystemAPI & xxxAPISet & AnotherAPISet>
+export type Apis = (SystemAPI)
 export type FlattedApis = {
     [K in keyof Apis]: {
         apiDef: K,
