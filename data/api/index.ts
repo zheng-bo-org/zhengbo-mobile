@@ -1,4 +1,6 @@
 import {SystemAPI} from "./system";
+import {setup, evalApi, RestRequestSender, LocalStorageManager} from 'lsp-api'
+import lspMetadata from './apiMetadata.json'
 
 //Api definition in Lisp syntax
 //An API is an abstraction to completely remove the complexity to the users of the API.
@@ -14,7 +16,7 @@ import {SystemAPI} from "./system";
 export type API<T extends {
     [K in string]: {
         req: {
-            [key:string]:any
+            [key: string]: any
         },
         res: {
             [key: string]: any
@@ -29,7 +31,7 @@ export type API<T extends {
 
 //Add more APIS here with the syntax: API<SystemAPI & xxxAPISet & AnotherAPISet>
 export type Apis = API<SystemAPI>
-export type FlattedApis  = {
+export type FlattedApis = {
     [K in keyof Apis]: {
         apiDef: K,
         reqDef: Apis[K]
@@ -37,7 +39,26 @@ export type FlattedApis  = {
 }
 type RequestTypeOfTheApiGeneric<T extends keyof FlattedApis> = FlattedApis[T]['reqDef']['req']
 type ResponseTypeOfTheApiGeneric<T extends keyof FlattedApis> = FlattedApis[T]['reqDef']['res']
-export async  function api<T extends keyof FlattedApis>(api: T, req: RequestTypeOfTheApiGeneric<T>):
+
+const requestSender: RestRequestSender = async (url, method, requestBody) => {
+    return await fetch(url, {
+        method: method.toUpperCase(),
+        body: JSON.stringify(requestBody)
+    }).then(rs => {
+        return rs.json()
+    })
+}
+const localStorageManager: LocalStorageManager = {
+    retrieve(key: string): object {
+        return {};
+    },
+    store(key: string, data: object): void {
+    }
+}
+
+
+setup(requestSender,localStorageManager, lspMetadata)
+export async function api<T extends keyof FlattedApis>(api: T, req: RequestTypeOfTheApiGeneric<T>):
     Promise<ResponseTypeOfTheApiGeneric<T>> {
-    return {} as any;
+    return evalApi(api, req);
 }
