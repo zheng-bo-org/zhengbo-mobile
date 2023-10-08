@@ -6,17 +6,31 @@ import {
     TouchableWithoutFeedback,
     View
 } from "react-native";
-import {useRef, useState} from "react";
+import {useEffect, useRef, useState} from "react";
+import {api} from "../../data/api";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function HomeScreen() {
     const textRef = useRef("Nothing more nothing less");
-   return <TouchableWithoutFeedback  style={{height: '100%'}} onPress={() => {
-       console.log("touched....")
-       if(Keyboard.isVisible()) {
-           Keyboard.dismiss()
-           console.log("keyboard dismissed")
-       }
-   }}>
+    const [roles, setRoles] = useState([])
+    useEffect(() => {
+        api("(Local/set-in system-roles)", {
+            roles: ["test1", "test2"]
+        }).then(() => {
+            api("(Local/get-in system-roles)", {}).then(rs => {
+                console.log(`roles? ${rs.roles}`)
+                setRoles(rs.roles as any)
+            })
+        })
+    }, []);
+
+    return <TouchableWithoutFeedback style={{height: '100%'}} onPress={() => {
+        console.log("touched....")
+        if (Keyboard.isVisible()) {
+            Keyboard.dismiss()
+            console.log("keyboard dismissed")
+        }
+    }}>
         <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
             <Text>
                 I am the home Screen.
@@ -25,9 +39,13 @@ export default function HomeScreen() {
             <TextInput
                 style={styles.input}
                 onChangeText={(text) => {
-                   textRef.current = text;
+                    textRef.current = text;
                 }}
             />
+
+            <Text>
+                The roles are: {roles.join("-")}
+            </Text>
         </View>
     </TouchableWithoutFeedback>
 }

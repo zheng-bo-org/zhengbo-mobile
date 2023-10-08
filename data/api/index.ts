@@ -1,6 +1,8 @@
 import {SystemAPI} from "./system";
 import {setup, evalApi, RestRequestSender, LocalStorageManager} from 'lsp-api'
 import lspMetadata from './apiMetadata.json'
+import AsyncStorage from '@react-native-async-storage/async-storage'
+import {logError} from "../../god/God";
 
 //Api definition in Lisp syntax
 //An API is an abstraction to completely remove the complexity to the users of the API.
@@ -35,14 +37,29 @@ const requestSender: RestRequestSender = async (url, method, requestBody) => {
 }
 const localStorageManager: LocalStorageManager = {
     retrieve(key: string): object {
-        return {};
+        return AsyncStorage.getItem(key).then(rs => {
+            if (rs == null) {
+                return {}
+            }
+
+           return JSON.parse(rs)
+        })
     },
-    store(key: string, data: object): void {
+    async store(key: string, data: object): Promise<void> {
+        try {
+            const old = localStorageManager.retrieve(key)
+            Object.assign(old, data);
+            await AsyncStorage.setItem(key, JSON.stringify(old))
+        } catch (ex) {
+            console.error(ex)
+            logError("AsyncLocalStorage", `error occurred while store the key ${key} with the data: ${JSON.stringify(data)}`, ex as any)
+        }
     }
 }
 
 
-setup(requestSender,localStorageManager, lspMetadata)
+setup(requestSender, localStorageManager, lspMetadata)
+
 export async function api<T extends keyof FlattedApis>(api: T, req: RequestTypeOfTheApiGeneric<T>):
     Promise<ResponseTypeOfTheApiGeneric<T>> {
     return evalApi(api, req);
