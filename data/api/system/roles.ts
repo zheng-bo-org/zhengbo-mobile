@@ -6,5 +6,21 @@ export type Roles = {
         res: {
 
         }
+    },
+    "(Local/get-in system-roles)": {
+        req: {
+
+        },
+        res: {
+            roles:string[]
+        }
+    },
+    "(Local/set-in system-roles)": {
+        req: {
+            roles: string[]
+        },
+        res: {
+
+        }
     }
 }
