@@ -5,6 +5,8 @@
   "scripts": {
     "start": "npm run compileLspApi && npm run type-check && expo start",
     "android": "npm run type-check && expo run:android",
+    "buildPreviewAndroid": "npm run compileLspApi && eas build -p android --profile preview",
+    "buildPreviewIos": "npm run compileLspApi && eas build -p ios --profile preview",
     "ios": "npm run type-check && expo run:ios",
     "web": "npm run type-check && expo start --web",
     "jest": "npm run type-check && jest",

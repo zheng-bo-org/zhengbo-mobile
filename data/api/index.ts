@@ -2,6 +2,7 @@ import {SystemAPI} from "./system";
 import {setup, evalApi, RestRequestSender, LocalStorageManager} from 'lsp-api'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import {logError} from "../../god/God";
+import apiMetadata from './apiMetadata.json'
 
 export type GeneralResponse<T> = {
     msg: string,
@@ -63,13 +64,7 @@ const localStorageManager: LocalStorageManager = {
     }
 }
 
-
-
-async function setUpLspAPI() {
-    setup(requestSender, localStorageManager, require('../../assets/apiMetadata.json'))
-}
-
-setUpLspAPI()
+setup(requestSender, localStorageManager, apiMetadata)
 export async function api<T extends keyof FlattedApis>(api: T, req: RequestTypeOfTheApiGeneric<T>):
     Promise<ResponseTypeOfTheApiGeneric<T>> {
     return evalApi(api, req);

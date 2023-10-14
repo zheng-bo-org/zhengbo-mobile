@@ -3,5 +3,3 @@ node_modules
 .idea
 ios
 android
-data/api/apiMetadata.json
-assets/apiMetadata.json

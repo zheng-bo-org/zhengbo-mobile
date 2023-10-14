@@ -1,7 +1,7 @@
 const fs = require("fs")
 const lspApi = require('lsp-api')
 
-lspApi.compileAll(process.cwd() + "/data/api", process.cwd() +  "/assets/apiMetadata.json",{
+lspApi.compileAll(process.cwd() + "/data/api", process.cwd() +  "/data/api/apiMetadata.json",{
     statSync(path) {
         return fs.statSync(path);
     },
