@@ -5,6 +5,7 @@
   "scripts": {
     "start": "npm run compileLspApi  && expo start",
     "android": "npm run compileLspApi  && expo run:android",
+    "buildPreviewAndroidLocal": "npx eas-cli@latest build --platform android --profile development --local",
     "buildPreviewAndroid": "npm run compileLspApi && eas build -p android --profile preview",
     "buildPreviewIos": "npm run compileLspApi && eas build -p ios --profile preview",
     "ios": "npm run compileLspApi &&  expo run:ios",
