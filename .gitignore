@@ -4,3 +4,4 @@ node_modules
 ios
 android
 data/api/apiMetadata.json
+assets/apiMetadata.json

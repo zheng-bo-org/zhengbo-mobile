@@ -4,6 +4,10 @@ import {Context, rootResourceLoader as AppContextLoader} from '../component/AppC
 import {Text, View} from "react-native";
 import {useRouter} from "expo-router";
 import {buildError} from "../component/AwardedError";
+import Svg, {Polygon} from "react-native-svg";
+import {useAppContext} from "../component/contexts/appContext";
+import {Image} from "expo-image";
+
 export {ErrorBoundary} from '../component/AwardedError'
 splashScreen.preventAutoHideAsync();
 
@@ -19,12 +23,27 @@ export interface ResourceLoader<T> {
 const resources: ResourceLoader<any>[] = []
 const rootResourceLoader: ResourceLoader<Context> = AppContextLoader;
 
+
 function LoadingScreen() {
-   return <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-       <Text>
-           I am the splash screen....
-       </Text>
-   </View>
+    const {state, dispatch} = useAppContext();
+
+
+    return <View style={{
+        flex: 1,
+        backgroundColor: state.system.currentTheme.theme.color["40%"],
+        alignItems: 'center',
+        justifyContent: 'center'
+    }}>
+        <Image
+            source={require('../assets/icon.png')}
+            style={{
+                flex: 1,
+                width: 300,
+                height: 500
+            }}
+            contentFit={"contain"}
+        />
+    </View>
 }
 
 
@@ -36,20 +55,19 @@ export default function App() {
 
     useEffect(() => {
         async function loadAppContext(): Promise<Context> {
-           const appContext = await rootResourceLoader.load(null);
-           if (typeof appContext === "string") {
-               throwError(() => {
-                   throw buildError("AppContextLoaderError", "The rootResourceLoader returns a string")
-               })
-           }
+            const appContext = await rootResourceLoader.load(null);
+            if (typeof appContext === "string") {
+                throwError(() => {
+                    throw buildError("AppContextLoaderError", "The rootResourceLoader returns a string")
+                })
+            }
 
-           return appContext as Context;
+            return appContext as Context;
         }
 
         async function prepare() {
             try {
                 const appContext: Context = await loadAppContext();
-                console.debug(`appContext? ${JSON.stringify(appContext)}`)
                 for (const resource of resources) {
                     await resource.load(appContext)
                 }
@@ -70,7 +88,7 @@ export default function App() {
 
     if (!appReady) {
         return <LoadingScreen/>
-    }else {
+    } else {
         splashScreen.hideAsync().then(() => {
             router.push("signIn")
         })

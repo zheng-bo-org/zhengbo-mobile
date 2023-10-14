@@ -22,7 +22,8 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.ontheroad.zhengbo"
     },
     "web": {
       "favicon": "./assets/favicon.png",
@@ -31,6 +32,15 @@
     "plugins": [
       "expo-router",
       "expo-localization"
-    ]
+    ],
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "2bb093bf-ac21-4a58-bb92-1b0ad112a196"
+      }
+    },
+    "owner": "ontheroad"
   }
 }

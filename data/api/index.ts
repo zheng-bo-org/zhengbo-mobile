@@ -1,8 +1,12 @@
 import {SystemAPI} from "./system";
 import {setup, evalApi, RestRequestSender, LocalStorageManager} from 'lsp-api'
-import lspMetadata from './apiMetadata.json'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import {logError} from "../../god/God";
+
+export type GeneralResponse<T> = {
+    msg: string,
+    data: T
+}
 
 //Api definition in Lisp syntax
 //An API is an abstraction to completely remove the complexity to the users of the API.
@@ -28,7 +32,9 @@ type RequestTypeOfTheApiGeneric<T extends keyof FlattedApis> = FlattedApis[T]['r
 type ResponseTypeOfTheApiGeneric<T extends keyof FlattedApis> = FlattedApis[T]['reqDef']['res']
 
 const requestSender: RestRequestSender = async (url, method, requestBody) => {
-    return await fetch(url, {
+    const finalUrl = `http://192.168.0.109:3000/api${url}`;
+    console.log(`finalUrl? ${finalUrl}`)
+    return await fetch(finalUrl, {
         method: method.toUpperCase(),
         body: JSON.stringify(requestBody)
     }).then(rs => {
@@ -58,8 +64,12 @@ const localStorageManager: LocalStorageManager = {
 }
 
 
-setup(requestSender, localStorageManager, lspMetadata)
 
+async function setUpLspAPI() {
+    setup(requestSender, localStorageManager, require('../../assets/apiMetadata.json'))
+}
+
+setUpLspAPI()
 export async function api<T extends keyof FlattedApis>(api: T, req: RequestTypeOfTheApiGeneric<T>):
     Promise<ResponseTypeOfTheApiGeneric<T>> {
     return evalApi(api, req);

@@ -14,21 +14,15 @@ export default function HomeScreen() {
     const textRef = useRef("Nothing more nothing less");
     const [roles, setRoles] = useState([])
     useEffect(() => {
-        api("(Local/set-in system-roles)", {
-            roles: ["test1", "test2"]
-        }).then(() => {
-            api("(Local/get-in system-roles)", {}).then(rs => {
-                console.log(`roles? ${rs.roles}`)
-                setRoles(rs.roles as any)
-            })
+        api('(Rest/get /systems/roles {} (Get system roles))', {}).then(rs => {
+            console.log(`rs? ${JSON.stringify(rs.roles)}`)
+            setRoles(rs.roles as any)
         })
     }, []);
 
     return <TouchableWithoutFeedback style={{height: '100%'}} onPress={() => {
-        console.log("touched....")
         if (Keyboard.isVisible()) {
             Keyboard.dismiss()
-            console.log("keyboard dismissed")
         }
     }}>
         <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
