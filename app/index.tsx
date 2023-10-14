@@ -1,10 +1,9 @@
 import {useEffect, useState} from "react";
 import * as splashScreen from 'expo-splash-screen'
 import {Context, rootResourceLoader as AppContextLoader} from '../component/AppContextBuilder'
-import {Text, View} from "react-native";
+import {View} from "react-native";
 import {useRouter} from "expo-router";
 import {buildError} from "../component/AwardedError";
-import Svg, {Polygon} from "react-native-svg";
 import {useAppContext} from "../component/contexts/appContext";
 import {Image} from "expo-image";
 
@@ -35,13 +34,12 @@ function LoadingScreen() {
         justifyContent: 'center'
     }}>
         <Image
-            source={require('../assets/icon.png')}
+            source={require('../assets/youAndMe.png')}
             style={{
                 flex: 1,
-                width: 300,
-                height: 500
+                width: '100%'
             }}
-            contentFit={"contain"}
+            contentFit={'cover'}
         />
     </View>
 }
