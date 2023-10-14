@@ -3,15 +3,15 @@
   "version": "1.0.0",
   "main": "expo-router/entry",
   "scripts": {
-    "start": "npm run compileLspApi && npm run type-check && expo start",
-    "android": "npm run type-check && expo run:android",
+    "start": "npm run compileLspApi  && expo start",
+    "android": "npm run compileLspApi  && expo run:android",
     "buildPreviewAndroid": "npm run compileLspApi && eas build -p android --profile preview",
     "buildPreviewIos": "npm run compileLspApi && eas build -p ios --profile preview",
-    "ios": "npm run type-check && expo run:ios",
-    "web": "npm run type-check && expo start --web",
-    "jest": "npm run type-check && jest",
+    "ios": "npm run compileLspApi &&  expo run:ios",
+    "web": "npm run compileLspApi &&  expo start --web",
+    "jest": "npm run compileLspApi && jest",
     "type-check": "tsc",
-    "compileLspApi": "node lspCompiler.js"
+    "compileLspApi": "npm run type-check && node lspCompiler.js"
   },
   "jest": {
     "preset": "jest-expo",
