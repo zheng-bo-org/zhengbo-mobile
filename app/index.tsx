@@ -70,7 +70,7 @@ export default function App() {
                     await resource.load(appContext)
                 }
                 await new Promise(resolve => {
-                    setTimeout(resolve, 3000)
+                    setTimeout(resolve, 5000)
                 })
                 setAppReady(true)
             } catch (ex) {
